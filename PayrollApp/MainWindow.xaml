@@ -1,0 +1,127 @@
+﻿<Window x:Class="PayrollApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:Behaviors="clr-namespace:PayrollApp.Utility"
+        xmlns:local="clr-namespace:PayrollApp"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="PayRollApp" Height="600" Width="1200">
+    <Grid Background="Azure">
+        <TabControl  x:Name="MainTab" TabStripPlacement="Left" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="LightGoldenrodYellow">
+            <TabItem  x:Name="ViewTabItem" Width="100" Height="75" Style="{DynamicResource MaterialDesignNavigationRailTabItem}"  Background="DeepSkyBlue" Padding="0">
+                <TabItem.Header>
+                    <StackPanel Height="75" Width="100"  >
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" FontSize="20" TextWrapping="Wrap"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"></TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <StackPanel>
+                    <Grid Background="#bFbd8a" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Foreground="White" Background="DarkGreen" HorizontalAlignment="Left" MaxWidth="200" Style="{StaticResource MaterialDesignFlatButton}" Click="AddButton_Click">Добавить</Button>
+                        <Button Grid.Column="1" Foreground="White" Background="DarkBlue" HorizontalAlignment="Left" MaxWidth="200" Style="{StaticResource MaterialDesignFlatButton}" Click="ChangeButton_Click">Изменить</Button>
+                        <Button Grid.Column="2" Foreground="White" Background="DarkRed" HorizontalAlignment="Left"  Style="{StaticResource MaterialDesignFlatButton}" MaxWidth="200" Click="DeleteButton_Click">Удалить</Button>
+
+                    </Grid>
+                    <Border Width="1000" CornerRadius="12" Background="Azure" Height="45" HorizontalAlignment="Center">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center">Текущая зп</TextBlock>
+                            <TextBlock x:Name="currentSalaryTB" Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Grid.Column="2" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center">Рассчитанная зп</TextBlock>
+                            <TextBlock x:Name="calculatedSalaryTB" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Grid.Column="4" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center">Текущая сумма</TextBlock>
+                            <TextBlock x:Name="currentSummTB" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock Grid.Column="6" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center">Рассчитанная сумма</TextBlock>
+                            <TextBlock x:Name="calculatedSummTB" Grid.Column="7" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <DatePicker x:Name="calculateDP" Grid.Column="8"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="89" Height="38" Margin="4,3,7,4"/>
+                            <Button x:Name="calculateButton" Click="CalculateButton_Click" Grid.Column="9"  HorizontalAlignment="Center" VerticalAlignment="Center">Считать</Button>
+                        </Grid>
+                    </Border>
+                    <DataGrid  AlternatingRowBackground="#F9f6c3"  IsReadOnly="True" GridLinesVisibility="All" Grid.Row="1" x:Name="ViewDataGrid"  AutoGenerateColumns="false" CanUserAddRows="false" BorderBrush="Black" Background="#E1DDAA" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Имя" Binding="{Binding FirstName}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Отчество" Binding="{Binding SecondName}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Дата приема" Binding="{Binding EmploymentDate, StringFormat=\{0:d\}}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Должность" Binding="{Binding Position}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Оклад" Binding="{Binding Rate}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Начальник" Binding="{Binding Chief.LastName}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Прямых подчиненных"  Binding="{Binding Subordinates.Count, Mode = OneWay}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </StackPanel>
+            </TabItem>
+            <TabItem  Visibility="Collapsed" x:Name="AddWorkerTabItem" Width="100" Height="75" Style="{DynamicResource MaterialDesignNavigationRailTabItem}"  Background="DeepSkyBlue" Padding="0">
+                <TabItem.Header  >
+                    <StackPanel Height="75" Width="150"  >
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" FontSize="20" TextWrapping="Wrap"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"></TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <Border MinWidth="400" MaxWidth="550" CornerRadius="20" Margin="15" Background="White" VerticalAlignment="Center" Padding="40">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock x:Name="AddWorkerHeaderTB" Visibility="Collapsed" FontSize ="30" FontWeight="Bold"  HorizontalAlignment="Center" Margin="0,40,0,20">Добавить работника</TextBlock>
+                        <TextBlock x:Name="ChangeWorkerHeaderTB" Visibility="Collapsed" FontSize ="30" FontWeight="Bold"  HorizontalAlignment="Center" Margin="0,40,0,20">Изменить</TextBlock>
+                        <TextBox  materialDesign:HintAssist.Hint="Имя" Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="firstName"></TextBox>
+                        <TextBox materialDesign:HintAssist.Hint="Отчество" Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="secondName"></TextBox>
+                        <TextBox materialDesign:HintAssist.Hint="Фамилия" Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="lastName"></TextBox>
+                        <ComboBox materialDesign:HintAssist.Hint="Должность" Style="{StaticResource MaterialDesignFloatingHintComboBox}" x:Name="position"></ComboBox>
+                        <TextBox materialDesign:HintAssist.Hint="Оклад" Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="rate">
+                            <i:Interaction.Behaviors>
+                                <Behaviors:TextBoxInputBehavior InputMode="DecimalInput"/>
+                            </i:Interaction.Behaviors>
+                        </TextBox>
+                        <ComboBox  materialDesign:HintAssist.Hint="Непосредственный начальник"  Style="{StaticResource MaterialDesignFloatingHintComboBox}" x:Name="chief"></ComboBox>
+                        <DatePicker materialDesign:HintAssist.Hint="Дата трудоустройства" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" x:Name="empDate"></DatePicker>
+                        <Grid Margin="0 20 0 20">
+                            <Button x:Name="UploadWorker" Visibility="Collapsed" Click="UploadWorker_Click" HorizontalAlignment="Center">Внести</Button>
+                            <Button x:Name="SaveChangesButton" Visibility="Collapsed" HorizontalAlignment="Center" Click="SaveChangesButton_Click" >Изменить</Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </TabItem>
+        </TabControl>
+
+
+
+
+    </Grid>
+</Window>
