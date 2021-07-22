@@ -95,6 +95,7 @@
     <Compile Include="Model\Payroll\SalesmanPay.cs" />
     <Compile Include="Model\Position.cs" />
     <Compile Include="Utility\TextBoxInputBehavior.cs" />
+    <Compile Include="ViewModel\CountSubordinates.cs" />
     <Compile Include="ViewModel\PayViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

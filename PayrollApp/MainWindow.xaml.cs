@@ -35,10 +35,22 @@ namespace PayrollApp
         }
 
         #region ButtonClick
+
+        private void Subordinate_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewDataGrid.SelectedItem == null)
+                return;
+            var selected = ViewDataGrid.SelectedItem as Worker;
+            
+           
+
+        }
         private void CalculateButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                if (ViewDataGrid.SelectedItem == null)
+                    return;
                 var selected = ViewDataGrid.SelectedItem as Worker;
                 currentSalaryTB.Text = GetWorkerSalary(selected, DateTime.Now).ToString();
                 calculatedSalaryTB.Text = GetWorkerSalary(selected, calculateDP.DisplayDate).ToString();
@@ -64,6 +76,8 @@ namespace PayrollApp
         {
             try
             {
+                if (ViewDataGrid.SelectedItem == null)
+                    return;
                 var selected = ViewDataGrid.SelectedItem as Worker;
                 empDate.SelectedDate = selected.EmploymentDate;
                 position.SelectedItem = selected.Position;
@@ -95,6 +109,8 @@ namespace PayrollApp
         }
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            if (ViewDataGrid.SelectedItem == null)
+                return;
             var selected = ViewDataGrid.SelectedItem as Worker;
             db.Workers.Remove(selected);
             try
@@ -243,6 +259,16 @@ namespace PayrollApp
             List<Worker> dbListWorkers = new List<Worker>();
             dbListWorkers = db.Workers.ToList();
 
+            int admins = -1;
+            for (int i=0; i< dbListWorkers.Count; i++)
+            {
+                if (dbListWorkers[i].Position == "Админ")
+                    admins = i;
+
+            }
+            if (admins >= 0)
+                dbListWorkers.Remove(dbListWorkers[admins]);
+
             _chiefs = new Chiefs(dbListWorkers);  //Синхронные списки
             List<string> ChiefLNames = new List<string>();
 
@@ -250,6 +276,7 @@ namespace PayrollApp
             {
                 ChiefLNames.Add(el.LastName);
             }
+           
             ViewDataGrid.ItemsSource = dbListWorkers;
             chief.ItemsSource = ChiefLNames;
             calculateDP.SelectedDate = DateTime.Now;
@@ -304,5 +331,10 @@ namespace PayrollApp
             else { chief.Background = Brushes.Transparent; }
         }
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

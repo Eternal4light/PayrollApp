@@ -38,7 +38,8 @@
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Foreground="White" Background="DarkGreen" HorizontalAlignment="Left" MaxWidth="200" Style="{StaticResource MaterialDesignFlatButton}" Click="AddButton_Click">Добавить</Button>
                         <Button Grid.Column="1" Foreground="White" Background="DarkBlue" HorizontalAlignment="Left" MaxWidth="200" Style="{StaticResource MaterialDesignFlatButton}" Click="ChangeButton_Click">Изменить</Button>
-                        <Button Grid.Column="2" Foreground="White" Background="DarkRed" HorizontalAlignment="Left"  Style="{StaticResource MaterialDesignFlatButton}" MaxWidth="200" Click="DeleteButton_Click">Удалить</Button>
+                        <Button Grid.Column="2" Foreground="White" Background="DarkRed"  Style="{StaticResource MaterialDesignFlatButton}" MaxWidth="200" Click="DeleteButton_Click" Margin="0,0,38,0">Удалить</Button>
+                        <Button Grid.Column="4" Grid.ColumnSpan="2" Foreground="White" Background="Black" Click="Subordinate_Button_Click" Style="{StaticResource MaterialDesignFlatButton}" MaxWidth="200"  Margin="0,0,38,0">Подчиненные</Button>
 
                     </Grid>
                     <Border Width="1000" CornerRadius="12" Background="Azure" Height="45" HorizontalAlignment="Center">
