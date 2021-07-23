@@ -40,7 +40,13 @@ namespace PayrollApp
         {
             if (ViewDataGrid.SelectedItem == null)
                 return;
+            var vm = new ViewModel.CountSubordinates();
             var selected = ViewDataGrid.SelectedItem as Worker;
+
+             List<Worker> subs =  vm.GetAllSubs(selected);
+            List<Worker> subs1 = vm.GetImmediateSubs(selected);
+            List<Worker> subs2 = vm.GetSecondarySubs(selected);
+            subs.Reverse();
             
            
 

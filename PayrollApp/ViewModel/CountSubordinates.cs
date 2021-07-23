@@ -24,7 +24,7 @@ namespace PayrollApp.ViewModel
         }
         public List<Worker> GetSecondarySubs(Worker worker)
         {
-            List<List<Worker>> secondaryGroups = new List<List<Worker>>();
+            List<Worker> secondarySubs = new List<Worker>();
             List<Worker> res = new List<Worker>();
 
             var immediateSubs = GetImmediateSubs(worker);
@@ -32,15 +32,18 @@ namespace PayrollApp.ViewModel
             {
                 foreach (var iSub in immediateSubs)
                 {
-                   secondaryGroups.Add(GetImmediateSubs(iSub));
+                    secondarySubs.AddRange(GetImmediateSubs(iSub));
+                    secondarySubs.AddRange(GetSecondarySubs(iSub));
                 }
-
-                foreach( List<Worker> el in secondaryGroups)
-                {
-                    res.AddRange(el);
-                }
-
             }
+            return secondarySubs;
+        }
+        public List<Worker> GetAllSubs(Worker worker)
+        {
+            var result = new List<Worker>();
+            result.AddRange(GetImmediateSubs(worker));
+            result.AddRange(GetSecondarySubs(worker));
+            return result;
         }
     }
 }
