@@ -1,4 +1,5 @@
 ﻿using PayrollApp.Model;
+using PayrollApp.Model.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,14 @@ namespace PayrollApp
 
         public MainWindow()
         {
+
+            SetDemoContent();
             InitializeComponent();
             SetViewContent();
-            SetDefaultAddTabContent(); 
+            SetDefaultAddTabContent();
         }
+
+        
 
         private decimal GetWorkerSalary(Worker selected, DateTime date)
         {
@@ -43,13 +48,10 @@ namespace PayrollApp
             var vm = new ViewModel.CountSubordinates();
             var selected = ViewDataGrid.SelectedItem as Worker;
 
-             List<Worker> subs =  vm.GetAllSubs(selected);
-            List<Worker> subs1 = vm.GetImmediateSubs(selected);
-            List<Worker> subs2 = vm.GetSecondarySubs(selected);
-            subs.Reverse();
-            
-           
-
+             List<Worker> allSubs =  vm.GetAllSubs(selected);
+            List<Worker> immediateSubs = vm.GetImmediateSubs(selected);
+            List<Worker> secondarySubs = vm.GetSecondarySubs(selected);
+            ViewDataGrid.ItemsSource = allSubs;
         }
         private void CalculateButton_Click(object sender, RoutedEventArgs e)
         {
@@ -246,6 +248,46 @@ namespace PayrollApp
         }
         #endregion
         #region SetContent
+        private void SetDemoContent()
+        {
+            db = new ApplicationContext();
+            List<Worker> checkList = db.Workers.ToList();
+            List<Authorizer> authCheck = db.Authorizers.ToList();
+            List<Worker> Admins = new List<Worker>();
+            if (checkList.Count < 1)
+            {
+                Worker superUser = new Salesman()
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = "suName",
+                    SecondName = "suSecName",
+                    LastName = "Нет",
+                    EmploymentDate = DateTime.Now,
+                    Position = "Админ",
+                    Rate = 0
+                };
+                db.Workers.Add(superUser);
+                db.SaveChanges();
+            }
+             foreach (var el in checkList)
+            {
+                if (el.Position == "Админ")
+                    Admins.Add(el);
+            }
+            Admins.Reverse();
+            if (authCheck.Count == 0)
+            {
+                var demoAuthorizer = new Authorizer()
+                {
+                    WorkerId = Admins[0].Id,
+                    Login = "superUser",
+                    Password = "suPEruSEr"
+                };
+                db.Authorizers.Add(demoAuthorizer);
+                //db.SaveChanges
+            }
+        }
+
         private void SetDefaultAddTabContent()
         {
             var positionBoxContent = new Model.Position("Employee", "Manager", "Salesman");
@@ -261,9 +303,20 @@ namespace PayrollApp
         }
         private void SetViewContent()
         {
+           
+        
+
             db = new ApplicationContext();
             List<Worker> dbListWorkers = new List<Worker>();
             dbListWorkers = db.Workers.ToList();
+
+            _chiefs = new Chiefs(dbListWorkers);  //Синхронные списки
+            List<string> ChiefLNames = new List<string>();
+
+            foreach (var el in _chiefs.AllChiefs)
+            {
+                ChiefLNames.Add(el.LastName);
+            }
 
             int admins = -1;
             for (int i=0; i< dbListWorkers.Count; i++)
@@ -275,13 +328,7 @@ namespace PayrollApp
             if (admins >= 0)
                 dbListWorkers.Remove(dbListWorkers[admins]);
 
-            _chiefs = new Chiefs(dbListWorkers);  //Синхронные списки
-            List<string> ChiefLNames = new List<string>();
-
-            foreach (var el in _chiefs.AllChiefs)
-            {
-                ChiefLNames.Add(el.LastName);
-            }
+           
            
             ViewDataGrid.ItemsSource = dbListWorkers;
             chief.ItemsSource = ChiefLNames;
