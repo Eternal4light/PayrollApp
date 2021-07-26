@@ -1,5 +1,7 @@
 ﻿using PayrollApp.Model;
 using PayrollApp.Model.Entity;
+using PayrollApp.Utility;
+using PayrollApp.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,22 +19,21 @@ using System.Windows.Shapes;
 
 namespace PayrollApp
 {
+    public delegate void SetMWContent();
+
+    
     public partial class MainWindow : Window
     {
         ApplicationContext db;
         Chiefs _chiefs;
+        public Worker user;
 
         public MainWindow()
         {
-
-            SetDemoContent();
             InitializeComponent();
             SetViewContent();
             SetDefaultAddTabContent();
         }
-
-        
-
         private decimal GetWorkerSalary(Worker selected, DateTime date)
         {
             var vm = new ViewModel.PayViewModel();
@@ -40,6 +41,15 @@ namespace PayrollApp
         }
 
         #region ButtonClick
+
+        private void Set_Login_Button(object sender, RoutedEventArgs e)
+        {
+            if (ViewDataGrid.SelectedItem == null)
+                return;
+            var slw = new View.SetLoginWindow();
+            slw.worker = ViewDataGrid.SelectedItem as Worker;
+            slw.Show();
+        }
 
         private void Subordinate_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -248,46 +258,20 @@ namespace PayrollApp
         }
         #endregion
         #region SetContent
-        private void SetDemoContent()
-        {
-            db = new ApplicationContext();
-            List<Worker> checkList = db.Workers.ToList();
-            List<Authorizer> authCheck = db.Authorizers.ToList();
-            List<Worker> Admins = new List<Worker>();
-            if (checkList.Count < 1)
-            {
-                Worker superUser = new Salesman()
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = "suName",
-                    SecondName = "suSecName",
-                    LastName = "Нет",
-                    EmploymentDate = DateTime.Now,
-                    Position = "Админ",
-                    Rate = 0
-                };
-                db.Workers.Add(superUser);
-                db.SaveChanges();
-            }
-             foreach (var el in checkList)
-            {
-                if (el.Position == "Админ")
-                    Admins.Add(el);
-            }
-            Admins.Reverse();
-            if (authCheck.Count == 0)
-            {
-                var demoAuthorizer = new Authorizer()
-                {
-                    WorkerId = Admins[0].Id,
-                    Login = "superUser",
-                    Password = "suPEruSEr"
-                };
-                db.Authorizers.Add(demoAuthorizer);
-                //db.SaveChanges
-            }
-        }
 
+        public void SetPartOfContent(object sender, RoutedEventArgs e)
+        {
+            var vm = new ViewModel.CountSubordinates();
+            var viewList = new List<Worker>();
+            viewList.Add(user);
+            viewList.AddRange(vm.GetAllSubs(user));
+            ViewDataGrid.ItemsSource = viewList;
+        }
+        public void SetViewContentForOtherVersions(object sender, RoutedEventArgs e)
+        {
+            SetMWContent setCont = new SetMWContent(SetViewContent);
+            setCont();
+        }
         private void SetDefaultAddTabContent()
         {
             var positionBoxContent = new Model.Position("Employee", "Manager", "Salesman");
@@ -303,9 +287,6 @@ namespace PayrollApp
         }
         private void SetViewContent()
         {
-           
-        
-
             db = new ApplicationContext();
             List<Worker> dbListWorkers = new List<Worker>();
             dbListWorkers = db.Workers.ToList();
@@ -328,11 +309,9 @@ namespace PayrollApp
             if (admins >= 0)
                 dbListWorkers.Remove(dbListWorkers[admins]);
 
-           
-           
             ViewDataGrid.ItemsSource = dbListWorkers;
             chief.ItemsSource = ChiefLNames;
-            calculateDP.SelectedDate = DateTime.Now;
+            calculateDP.SelectedDate = DateTime.Now; 
         }
         private void SetAddForm(out string fName, out string sName, out string lName, out DateTime employDate, out decimal rt, out string pos, out Guid chiefid)
         {
@@ -384,10 +363,5 @@ namespace PayrollApp
             else { chief.Background = Brushes.Transparent; }
         }
         #endregion
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

@@ -38,7 +38,7 @@ namespace PayrollApp.ViewModel
                     return workerPayModel.GetSalary(date);
                 }
         }
-        private static void SetInstance(Worker worker, Worker workerPayModel)
+        public static void SetInstance(Worker worker, Worker workerPayModel)
         {
             workerPayModel.Rate = worker.Rate;
             workerPayModel.EmploymentDate = worker.EmploymentDate;

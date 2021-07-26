@@ -36,11 +36,13 @@
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Foreground="White" Background="DarkGreen" HorizontalAlignment="Left" MaxWidth="200" Style="{StaticResource MaterialDesignFlatButton}" Click="AddButton_Click">Добавить</Button>
-                        <Button Grid.Column="1" Foreground="White" Background="DarkBlue" HorizontalAlignment="Left" MaxWidth="200" Style="{StaticResource MaterialDesignFlatButton}" Click="ChangeButton_Click">Изменить</Button>
-                        <Button Grid.Column="2" Foreground="White" Background="DarkRed"  Style="{StaticResource MaterialDesignFlatButton}" MaxWidth="200" Click="DeleteButton_Click" Margin="0,0,38,0">Удалить</Button>
+                        <Button x:Name="AddButton" Grid.Column="0" Foreground="White" Background="DarkGreen" HorizontalAlignment="Left" MaxWidth="200" Style="{StaticResource MaterialDesignFlatButton}" Click="AddButton_Click">Добавить</Button>
+                        <Button x:Name="ChangeButton" Grid.Column="1" Foreground="White" Background="DarkBlue" HorizontalAlignment="Left" MaxWidth="200" Style="{StaticResource MaterialDesignFlatButton}" Click="ChangeButton_Click">Изменить</Button>
+                        <Button x:Name="DeleteButton" Grid.Column="2" Foreground="White" Background="DarkRed"  Style="{StaticResource MaterialDesignFlatButton}" MaxWidth="200" Click="DeleteButton_Click" Margin="0,0,38,0">Удалить</Button>
                         <Button Grid.Column="4" Grid.ColumnSpan="2" Foreground="White" Background="Black" Click="Subordinate_Button_Click" Style="{StaticResource MaterialDesignFlatButton}" MaxWidth="200"  Margin="0,0,38,0">Подчиненные</Button>
-                        <Button Grid.Column="6" Grid.ColumnSpan="1" Foreground="Black" Background="SeaShell"  Style="{StaticResource MaterialDesignFlatButton}" MaxWidth="200"  Margin="0,0,38,0">Логин</Button>
+                        <Button x:Name="SLButton" Grid.Column="6" Grid.ColumnSpan="2" Foreground="Black" Background="SeaShell"  Click="Set_Login_Button" Style="{StaticResource MaterialDesignFlatButton}" MaxWidth="200"  Margin="0,0,38,0">Задать логин</Button>
+                        <Button x:Name="RefreshButton" Grid.Column="8" Foreground="Black" Background="LawnGreen" Style="{StaticResource MaterialDesignFlatButton}" MaxWidth="200"  Margin="0,0,38,0">Refresh</Button>
+                        
 
                     </Grid>
                     <Border Width="1000" CornerRadius="12" Background="Azure" Height="45" HorizontalAlignment="Center">
