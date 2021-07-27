@@ -22,8 +22,25 @@ namespace PayrollApp.View
         ApplicationContext db;
         public LoginWindow()
         {
+            //ClearDataBaseForTest();
             SetDemoContent();
             InitializeComponent();
+        }
+        private void ClearDataBaseForTest()
+        {
+            db = new ApplicationContext();
+            List<Worker> works = db.Workers.ToList();
+            List<Authorizer> auths = db.Authorizers.ToList();
+            foreach (var el in works)
+            {
+                db.Workers.Remove(el);
+            }
+            foreach (var el in auths)
+            {
+                db.Authorizers.Remove(el);
+            }
+
+            db.SaveChanges();
         }
         private void Button_Entry_Click(object sender, RoutedEventArgs e)
         {
@@ -98,6 +115,7 @@ namespace PayrollApp.View
                     Position = "Админ",
                     Rate = 0
                 };
+                checkList.Add(superUser);
                 db.Workers.Add(superUser);
                 db.SaveChanges();
             }
